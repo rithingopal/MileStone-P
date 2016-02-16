@@ -1,7 +1,7 @@
 # MileStone-P
 
-black jack
-https://github.com/rithingopal/MileStone-P.git
+black jack 
+
 
 package BlackJack;
 /**
@@ -246,11 +246,11 @@ public class GameRunner {
 	
 		
 		
-		Scanner sc = new Scanner(System.in);
-		Deck theDeck = new Deck(1, true);
+	Scanner sc = new Scanner(System.in);
+	Deck theDeck = new Deck(1, true);
 		
-		//init the player objects
-		Player me = new Player("rithin");
+	//init the player objects
+	Player me = new Player("rithin");
 	Player dealer = new Player("Dealer");
 	
 	me.addCard(theDeck.dealNextCard());
@@ -283,21 +283,21 @@ public class GameRunner {
 			//if player hits
 			if(ans.compareToIgnoreCase("H")== 0){
 				
-				//add next card in the deck and store whether player is busted.
-				meDone = !me.addCard(theDeck.dealNextCard());
+			//add next card in the deck and store whether player is busted.
+			meDone = !me.addCard(theDeck.dealNextCard());
 			}
 			else{ 
-				meDone = true;
+			meDone = true;
 			
 			}
 		}
 	
 		//dealer turn
 		if(!dealerDone){
-			if (dealer.getHandSum() < 17){
-				System.out.println("the Dealer hits\n");
-				dealerDone = !dealer.addCard(theDeck.dealNextCard());
-				dealer.printHand(false);
+		if (dealer.getHandSum() < 17){
+			System.out.println("the Dealer hits\n");
+			dealerDone = !dealer.addCard(theDeck.dealNextCard());
+			dealer.printHand(false);
 				
 			}
 			else{
@@ -446,16 +446,16 @@ public class Player {
 	 */
 	public void printHand(boolean showFirstCard){
 		
-		System.out.printf("&s's cards:\n",this.name);
+	System.out.printf("&s's cards:\n",this.name);
 		for(int c=0;c<this.numCards;c++){
 		if (c== 0 && !showFirstCard){
 		System.out.println("   [hidden]");
-				
-		} 
-		else{
-		System.out.printf(" %s\n",this.hand[c].toString());
-		
-			}
+						
+		}else{
+        	System.out.printf(" %s\n",this.hand[c].toString());
+					
+					
+		}
 		}
 				
 	}
