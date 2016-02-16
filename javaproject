@@ -1,0 +1,464 @@
+# MileStone-P
+
+black jack
+https://github.com/rithingopal/MileStone-P.git
+
+package BlackJack;
+/**
+ * this implements a card type
+ * @author RithinGopal
+ *
+ */
+public class Card {
+	private Suit mySuit;
+	/**
+	 * the number of this cards,where ace:1,jack-king:11-13;
+	 */
+    private int myNumber; /*this basically represents value of a card 3,4,5,ace etc*/
+    /**
+     * card constructor
+     * 
+     * @param aSuit  the suit of the card
+     * @param aNumber the number of the card
+     */
+    public Card(Suit aSuit,int aNumber){
+    	
+    	this.mySuit= aSuit;
+    	
+    	if(aNumber >= 1 && aNumber <= 13){
+    		this.myNumber = aNumber ;
+    	}
+    	else{
+    		System.err.println(aNumber + "is not a valid number");
+    System.exit(1);
+    	}
+    	this.myNumber = aNumber;
+    	
+    }
+    /**
+     * return the number of the card
+     * @return the Number
+     */
+    public int getNumber(){
+    	return myNumber;
+    }
+    
+    public String toString(){
+    	
+    	String numStr="Error";
+    	
+    	switch (this.myNumber){
+    	case 2:
+    	numStr = "Two";
+    		break;
+    	case 3:
+        	numStr = "Three";
+        		break;
+    	case 4:
+        	numStr = "four";
+        		break;
+    	case 5:
+        	numStr = "five";
+        		break;
+    	case 6:
+        	numStr = "six";
+        		break;
+    	case 7:
+        	numStr = "seven";
+        		break;
+    	case 8:
+        	numStr = "eight";
+        		break;
+    	case 9:
+        	numStr = "nine";
+        		break;
+    	case 10:
+        	numStr = "ten";
+        		break;
+    	case 11:
+        	numStr = "Jack";
+        		break;
+    	case 12:
+        	numStr = "Queen";
+        		break;
+    	case 13:
+        	numStr = "King";
+        		break;
+        		
+    	case 1:
+        	numStr = "Ace";
+        		break;	
+     	
+        	    		
+    	}
+    	
+    	return numStr + " of " + mySuit.toString();
+    	
+    }
+    
+}
+
+
+2.
+package BlackJack;
+
+public enum Suit {
+Clubs,
+Diamonds,
+spades,
+Hearts,
+}
+
+
+3.
+package BlackJack;
+
+import java.util.Random;
+/**
+ * this implements deck of cards
+ * 
+ * @author RithinGopal
+
+
+ */
+public class Deck {
+	/**
+	 * the array of cards in the deck,where the top card is in the first index.
+	 */
+	private Card[] myCards;
+	/**
+	 * the number of cards currently in the deck.
+	 */
+	private int numCards;
+	
+	/**
+	 * constructor with default of one deck(i.e., 52 cards) and no shuffling.
+	 */
+	public Deck() {
+		// call the other constructor,defining one deck without shuffling
+		this(1, false);
+		
+	}
+	
+	
+	/**
+	 * Constructor that defines the decks(i.e,how many sets of 52 
+	 * cards are in the deck and whether is should be shuffled.
+	 * 
+	 * @param numDeck the number of individual decks in this deck
+	 * @param shuffle whether to shuffle the cards
+	 */
+	public Deck(int numDecks,boolean shuffle){
+		
+		this.numCards =numDecks * 52 ;
+		this.myCards = new Card[this.numCards];
+		// init card index
+		int c=0;
+		//for each deck
+		for (int d=0;d < numDecks;d++){
+		//for each suit
+		for (int s=0;s<4;s++){
+			//for each number
+		for (int n=1; n<=13;n++){
+//add a new card to the deck
+		this.myCards[c]=new Card (Suit.values()[s],n);
+		}
+		}
+		
+	}
+	
+		//shuffle,if needed
+		if(shuffle){
+			this.shuffle();
+		}
+	
+	}
+/**
+ * Shuffle deck by randomly swapping pairs of cards
+ */
+public void shuffle() {
+	
+	// init random number generator
+	Random rng = new Random();
+	
+	
+	//temparory
+	
+	Card temp;
+	
+	int j;
+	for (int i = 0; i<this.numCards; i++) {
+		
+		//get a random card j to swap i's value with
+		j = rng.nextInt(this.numCards);
+		
+		
+		// do swap
+		temp = this.myCards[i];
+		this.myCards[i] = this.myCards[j];
+		this.myCards[j] = temp;
+		
+		
+	}
+}
+
+public Card dealNextCard(){
+	
+	//get the top card
+	Card top = this.myCards[0];
+	
+	//shift  all the subsquents cards to the left by one index
+	for(int c = 1;c < this.numCards; c++){
+		this.myCards[c-1] = this.myCards[c];
+		
+	}
+	this.myCards[this.numCards-1] = null;
+	
+	// decrement the number of cards in our deck
+	this.numCards--;
+	
+	return top;
+	
+}
+/**
+ * Print the top cards to deck
+ * 
+ * @param numToPrint  the number of cards from the top of the deck to print
+ */
+
+public void printDeck(int numToPrint){
+	
+	for(int c= 0;c<numToPrint;c++){
+		System.out.printf("% 3d/%d %s\n", c+1 ,this.numCards,this.myCards[c].toString());
+	}
+	System.out.printf("\t[%d others]\n",this.numCards - numToPrint);
+}
+}
+4
+
+package BlackJack;
+
+import java.util.Scanner;
+
+public class GameRunner {
+
+	public static void main(String[] args) {
+	
+		
+		
+		Scanner sc = new Scanner(System.in);
+		Deck theDeck = new Deck(1, true);
+		
+		//init the player objects
+		Player me = new Player("rithin");
+	Player dealer = new Player("Dealer");
+	
+	me.addCard(theDeck.dealNextCard());
+	dealer.addCard(theDeck.dealNextCard());
+	me.addCard(theDeck.dealNextCard());
+	dealer.addCard(theDeck.dealNextCard());
+	
+	
+	//print initial hands
+	System.out.println("Cards are dealt\n");
+	me.printHand(true);
+	dealer.printHand(false);
+	System.out.println("\n");
+	
+	
+	//flags for when each player is finished hitting
+	boolean meDone = false ;
+	boolean dealerDone = false ;
+	String ans;
+	
+	while(!meDone || !dealerDone){
+		
+		//player's turn
+		if (!meDone){
+			
+			System.out.print("Hit or Stay? (Enter H or S): ");
+			ans = sc.next();
+			System.out.println();
+			
+			//if player hits
+			if(ans.compareToIgnoreCase("H")== 0){
+				
+				//add next card in the deck and store whether player is busted.
+				meDone = !me.addCard(theDeck.dealNextCard());
+			}
+			else{ 
+				meDone = true;
+			
+			}
+		}
+	
+		//dealer turn
+		if(!dealerDone){
+			if (dealer.getHandSum() < 17){
+				System.out.println("the Dealer hits\n");
+				dealerDone = !dealer.addCard(theDeck.dealNextCard());
+				dealer.printHand(false);
+				
+			}
+			else{
+				System.out.println("The Dealer stays\n");
+				dealerDone = true;
+				
+			}
+		}
+		System.out.println();
+	}
+	//close scanner
+	sc.close();
+	
+	
+	//print final hands
+	me.printHand(true);
+	dealer.printHand(true);
+	
+	int mySum = me.getHandSum();
+	int dealerSum = dealer.getHandSum();
+	
+	if(mySum > dealerSum && mySum <= 21 || dealerSum >21){
+		System.out.println("your win");
+		
+		
+	}
+	else{
+		System.out.println("Dealer win!");
+		
+	}
+	
+	}
+	
+
+}
+
+5.
+package BlackJack;
+
+/**
+ * An implement of a blackjack player
+ * 
+ * @author RithinGopal
+ *
+ */
+
+public class Player {
+
+	/**
+	 * the player's name.
+	 */
+	private String name;
+	/**
+	 * the cards in the player's current hand.
+	 */
+	private Card[] hand = new Card[10];
+	
+	private int numCards;
+	
+	public Player(String aName){
+		
+		this.name = aName;
+		
+		this.emptyHand();
+	}
+	
+	public void emptyHand(){
+
+		 for(int c = 0;c<10;c++){
+			 this.hand[c] = null;
+			 
+		 }
+		 this.numCards = 0;
+		 
+	}
+
+	/**
+	 * add a card to the player hand
+	 * 
+	 * 
+	 * @param aCard aCard the card to add
+	 * @return  whether the sum of the new cards is below or equal to 21
+	 */
+	public boolean addCard(Card aCard){
+		
+		if(this.numCards == 10){
+			
+			System.out.printf("%s ' s hand already has 10 cards; " + "cannot add another\n", this.name);
+			System.exit(1);
+		}
+			
+			this.hand[this.numCards] = aCard;
+			this.numCards++;
+			
+			return (this.getHandSum() <= 21);
+		}
+		
+		
+		
+	
+/**
+ * get the sum of cards in the player's hand.
+ * @return the sum
+ */
+	public int getHandSum() {
+		// TODO Auto-generated method stub
+		
+		int handSum = 0;
+		int cardNum;
+		int numAces = 0;
+		
+		//calculate each card's contribution to the hand sum
+		
+		for(int c =0; c < this.numCards;c++){
+			
+			//get the number for the current card
+			cardNum = this.hand[c].getNumber();
+			
+			if(cardNum ==1 ){
+				numAces++;
+					handSum +=10;
+			}
+			else if (cardNum > 10){
+				handSum += 10;
+			}
+			else {
+				handSum += cardNum ;
+				
+			
+				
+			}
+		}
+		// if we have aces and our sum is > 21,set some/all of them to value 1
+		//instead
+		while (handSum >21 && numAces > 0 ){
+			handSum-= 10;
+			numAces--;
+			
+		}
+		return handSum;
+	}
+	
+	/**
+	 * 
+	 * @param showFirstCard
+	 */
+	public void printHand(boolean showFirstCard){
+		
+		System.out.printf("&s's cards:\n",this.name);
+				for(int c=0;c<this.numCards;c++){
+					if (c== 0 && !showFirstCard){
+						System.out.println("   [hidden]");
+						
+					}else{
+						System.out.printf(" %s\n",this.hand[c].toString());
+					
+					
+					}
+				}
+				
+	}
+	
+}
+
