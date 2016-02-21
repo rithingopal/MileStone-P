@@ -1,0 +1,127 @@
+5.
+package BlackJack;
+
+/**
+ * An implement of a blackjack player
+ * 
+ * @author RithinGopal
+ *
+ */
+
+public class Player {
+
+	/**
+	 * the player's name.
+	 */
+	private String name;
+	/**
+	 * the cards in the player's current hand.
+	 */
+	private Card[] hand = new Card[10];
+	
+	private int numCards;
+	
+	public Player(String aName){
+		
+		this.name = aName;
+		
+		this.emptyHand();
+	}
+	
+	public void emptyHand(){
+
+		 for(int c = 0;c<10;c++){
+			 this.hand[c] = null;
+			 
+		 }
+		 this.numCards = 0;
+		 
+	}
+
+	/**
+	 * add a card to the player hand
+	 * 
+	 * 
+	 * @param aCard aCard the card to add
+	 * @return  whether the sum of the new cards is below or equal to 21
+	 */
+	public boolean addCard(Card aCard){
+		
+		if(this.numCards == 10){
+			
+			System.out.printf("%s ' s hand already has 10 cards; " + "cannot add another\n", this.name);
+			System.exit(1);
+		}
+			
+			this.hand[this.numCards] = aCard;
+			this.numCards++;
+			
+			return (this.getHandSum() <= 21);
+		}
+		
+		
+		
+	
+/**
+ * get the sum of cards in the player's hand.
+ * @return the sum
+ */
+	public int getHandSum() {
+		// TODO Auto-generated method stub
+		
+		int handSum = 0;
+		int cardNum;
+		int numAces = 0;
+		
+		//calculate each card's contribution to the hand sum
+		
+		for(int c =0; c < this.numCards;c++){
+			
+			//get the number for the current card
+			cardNum = this.hand[c].getNumber();
+			
+			if(cardNum ==1 ){
+				numAces++;
+					handSum +=10;
+			}
+			else if (cardNum > 10){
+				handSum += 10;
+			}
+			else {
+				handSum += cardNum ;
+				
+			
+				
+			}
+		}
+		// if we have aces and our sum is > 21,set some/all of them to value 1
+		//instead
+		while (handSum >21 && numAces > 0 ){
+			handSum-= 10;
+			numAces--;
+			
+		}
+		return handSum;
+	}
+	
+	/**
+	 * 
+	 * @param showFirstCard
+	 */
+	public void printHand(boolean showFirstCard){
+		
+	System.out.printf("&s's cards:\n",this.name);
+		for(int c=0;c<this.numCards;c++){
+		if (c== 0 && !showFirstCard){
+		System.out.println("   [hidden]");
+						
+		}else{
+        	System.out.printf(" %s\n",this.hand[c].toString());
+					
+					
+		}
+		}
+				
+	}
+	
+}
