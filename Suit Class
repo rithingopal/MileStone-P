@@ -1,0 +1,10 @@
+2.
+package BlackJack;
+
+public enum Suit {
+Clubs,
+Diamonds,
+spades,
+Hearts,
+}
+
